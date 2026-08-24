@@ -1,37 +1,17 @@
-# Sample testbench for a Tiny Tapeout project
+# Test — tt_um_sobel_vic
 
-This is a sample testbench for a Tiny Tapeout project. It uses [cocotb](https://docs.cocotb.org/en/stable/) to drive the DUT and check the outputs.
-See below to get started or for more information, check the [website](https://tinytapeout.com/hdl/testing/).
+Simulacion con **cocotb** + Icarus Verilog.
 
-## Setting up
-
-1. Edit [Makefile](Makefile) and modify `PROJECT_SOURCES` to point to your Verilog files.
-2. Edit [tb.v](tb.v) and replace `tt_um_example` with your module name.
-
-## How to run
-
-To run the RTL simulation:
-
-```sh
+```bash
+rm -rf sim_build results.xml     # el sim_build se comparte entre proyectos: limpiarlo al cambiar
 make -B
 ```
 
-To run gatelevel simulation, first harden your project and copy `../runs/wokwi/results/final/verilog/gl/{your_module_name}.v` to `gate_level_netlist.v`.
+El test alimenta una imagen sintetica de 60x12 con un **escalon de brillo** en la columna 30
+(oscuro 20 / claro 200) y comprueba que:
 
-Then run:
+1. salen pulsos de `out_valid` (`uio_out[1]`),
+2. aparecen pixeles de **borde** (`uo_out == 0xFF`) donde esta el escalon,
+3. **no** sale todo borde — o sea que el umbral (90) discrimina.
 
-```sh
-make -B GATES=yes
-```
-
-## How to view the VCD file
-
-Using GTKWave
-```sh
-gtkwave tb.vcd tb.gtkw
-```
-
-Using Surfer
-```sh
-surfer tb.vcd
-```
+Las formas de onda quedan en `tb.vcd`.
